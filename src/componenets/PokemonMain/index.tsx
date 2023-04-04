@@ -2,7 +2,7 @@ import useDebounce from "@/src/libs/hooks/useDebounce";
 import useIntersectionObserver from "@/src/libs/hooks/useIntersectionObserver";
 import styles from "@/styles/pokemon/pokemonMain.module.scss";
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { useLoadingStore } from "@/src/libs/stores/useLoadingStore";
 import Image from "next/image";
@@ -33,22 +33,20 @@ export default function PokemonMain() {
     }
   };
 
-  const handleSearch = async () => {
+  const handleSearch = useCallback(async () => {
     on();
     try {
       const res = await axios.get(`${apiUrl}/${searchText}`);
-      console.log(res.data);
       setSearchResult(res.data);
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
     } finally {
       off();
     }
-  };
+  }, [searchText, on, off]);
 
   useEffect(() => {
     (async () => {
-      // on();
       console.log(debouncedValue);
       if (debouncedValue) {
         try {
@@ -60,8 +58,6 @@ export default function PokemonMain() {
           setPage(page + 1);
         } catch (error) {
           console.error(error);
-        } finally {
-          // off();
         }
       }
     })();
