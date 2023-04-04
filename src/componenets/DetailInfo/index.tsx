@@ -26,10 +26,8 @@ export default function DetailInfo() {
         on();
         try {
           const res: any = await axios.get(`${apiUrl}/${idx}`);
-          // console.log(res.data);
           setData(res.data);
           const resSpecies = await axios.get(`${res.data.species.url}`);
-          // console.log(resSpecies.data);
           setSpecData(resSpecies.data);
           const korean = resSpecies.data.names.find(
             (value: any) => value.language.name === "ko"
@@ -41,7 +39,6 @@ export default function DetailInfo() {
           const resEvolution = await axios.get(
             `https://pokeapi.co/api/v2/evolution-chain/${evolutionChainIdx}`
           );
-          console.log(resEvolution.data.chain);
           setEvolutionChain(resEvolution.data.chain);
         } catch (error) {
           console.log(error);

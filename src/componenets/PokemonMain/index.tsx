@@ -47,13 +47,11 @@ export default function PokemonMain() {
 
   useEffect(() => {
     (async () => {
-      console.log(debouncedValue);
       if (debouncedValue) {
         try {
           const response = await axios.get(
             `${apiUrl}?limit=${perPage}&offset=${(page - 1) * perPage}`
           );
-          console.log(response.data.results);
           setPokemons(pokemons.concat(response.data.results));
           setPage(page + 1);
         } catch (error) {
