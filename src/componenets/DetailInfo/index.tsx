@@ -26,10 +26,10 @@ export default function DetailInfo() {
         on();
         try {
           const res: any = await axios.get(`${apiUrl}/${idx}`);
-          console.log(res.data);
+          // console.log(res.data);
           setData(res.data);
           const resSpecies = await axios.get(`${res.data.species.url}`);
-          console.log(resSpecies.data);
+          // console.log(resSpecies.data);
           setSpecData(resSpecies.data);
           const korean = resSpecies.data.names.find(
             (value: any) => value.language.name === "ko"
@@ -74,10 +74,10 @@ export default function DetailInfo() {
       </div>
       <div className={styles.detailWrap}>
         <Image
-          src={data?.sprites?.front_default}
+          src={data?.sprites?.front_default || "/blank.png"}
           width={150}
           height={150}
-          alt=""
+          alt={`image ${data?.sprites?.front_default}`}
         />
         <div className={styles.infoWrap}>
           <div className={styles.subTitle}>기본정보</div>
@@ -95,14 +95,16 @@ export default function DetailInfo() {
             ></div>
           </div>
           <div className={styles.eachLine}>
-            habitat: {specData.habitat?.name || "error"}
+            habitat: {specData.habitat?.name || "none"}
           </div>
           <div className={styles.eachLine}>
-            generation: {specData.generation?.name || "error"}
+            generation: {specData.generation?.name || "none"}
           </div>
           <div className={styles.eachLine}>
-            shape: {specData.shape?.name || "error"}
+            shape: {specData.shape?.name || "none"}
           </div>
+          <div className={styles.eachLine}>weight: {data.weight || "none"}</div>
+          <div className={styles.eachLine}>height: {data.height || "none"}</div>
         </div>
         {evolutionChain && (
           <div className={styles.evolutionWrap}>
