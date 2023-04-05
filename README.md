@@ -37,3 +37,7 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 # pokeapi-deck
+-pokemon list
+-infinite scroll
+-pokemon number search
+-pokemon detail information
