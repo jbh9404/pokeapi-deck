@@ -8,26 +8,28 @@ import { useLoadingStore } from "@/src/libs/stores/useLoadingStore";
 import Image from "next/image";
 import { apiUrl, picUrl } from "@/src/libs/api/apiStatic";
 import Spinner from "@/src/assets/etc/Spinner";
+import { Pokemon, SearchResult } from "./index.d";
+import { LoadingState } from "@/src/libs/stores";
 
 const perPage = 20;
 
 export default function PokemonMain() {
   const router = useRouter();
-  const [pokemons, setPokemons] = useState<Array<any>>([]);
+  const [pokemons, setPokemons] = useState<Pokemon[]>([]);
   const [page, setPage] = useState<number>(1);
   const [searchText, setSearchText] = useState<string>("");
-  const [searchResult, setSearchResult] = useState<any>({});
+  const [searchResult, setSearchResult] = useState<SearchResult | null>(null);
 
-  const isLoading = useLoadingStore((state: any) => state.isLoading);
-  const on = useLoadingStore((state: any) => state.on);
-  const off = useLoadingStore((state: any) => state.off);
+  const isLoading = useLoadingStore((state: LoadingState) => state.isLoading);
+  const on = useLoadingStore((state: LoadingState) => state.on);
+  const off = useLoadingStore((state: LoadingState) => state.off);
 
   const targetRef = useRef<HTMLDivElement | null>(null);
   const entry = useIntersectionObserver(targetRef, {});
   const isEndVisible = !!entry?.isIntersecting;
   const debouncedValue = useDebounce<boolean>(isEndVisible, 500);
 
-  const enterKey = (e: any): void => {
+  const enterKey = (e: React.KeyboardEvent<HTMLInputElement>): void => {
     if (e.key === "Enter") {
       handleSearch();
     }
@@ -68,10 +70,10 @@ export default function PokemonMain() {
           src="/logo.png"
           width={200}
           height={70}
-          alt={`image ${searchResult.id}`}
+          alt="logo"
           style={{ cursor: "pointer" }}
           onClick={() => {
-            setSearchResult({});
+            setSearchResult(null);
             router.push("/");
           }}
         />
@@ -92,7 +94,7 @@ export default function PokemonMain() {
         </div>
       ) : (
         <>
-          {Object.keys(searchResult).length > 0 ? (
+          {searchResult ? (
             <div
               className={styles.card}
               onClick={() => router.push(`/detail?idx=${searchResult.id}`)}
@@ -107,7 +109,7 @@ export default function PokemonMain() {
             </div>
           ) : (
             <div style={{ textAlign: "center" }}>
-              {pokemons.map((n: any, index) => (
+              {pokemons.map((n: Pokemon, index) => (
                 <div
                   className={styles.card}
                   key={index}
